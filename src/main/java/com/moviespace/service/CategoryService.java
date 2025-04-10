@@ -1,0 +1,35 @@
+package com.moviespace.service;
+
+import com.moviespace.entity.Category;
+import com.moviespace.repository.CategoryRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
+
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
+
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    public Optional<Category> getById(Long id) {
+        return Optional.ofNullable(categoryRepository.findById(id).orElse(null));
+    }
+
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
+}
