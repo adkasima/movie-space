@@ -1,6 +1,9 @@
 package com.moviespace.controller;
 
+import com.moviespace.controller.request.CategoryRequest;
+import com.moviespace.controller.response.CategoryResponse;
 import com.moviespace.entity.Category;
+import com.moviespace.mapper.CategoryMapper;
 import com.moviespace.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +20,27 @@ public class CategoryController {
 
 
     @GetMapping("/all")
-    public List<Category> getAllCategories() {
-        return categoryService.findAll();
+    public List<CategoryResponse> getAllCategories() {
+        List<Category> categories = categoryService.findAll();
+        return categories.stream()
+                .map(CategoryMapper::toCategoryResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public Optional<Category> getCategoryByID(@PathVariable  Long id) {
-        return categoryService.getById(id);
+    public CategoryResponse getCategoryByID(@PathVariable  Long id) {
+        Optional<Category> optCategory = categoryService.getById(id);
+        if (optCategory.isPresent()) {
+            return CategoryMapper.toCategoryResponse(optCategory.get());
+        }
+        return null;
     }
 
     @PostMapping("/create")
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    public CategoryResponse createCategory(@RequestBody CategoryRequest request) {
+        Category newCategory = CategoryMapper.toCategory(request);
+        Category savedCategory = categoryService.createCategory(newCategory);
+        return CategoryMapper.toCategoryResponse(savedCategory);
     }
 
     @DeleteMapping("/delete/{id}")
