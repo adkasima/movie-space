@@ -2,8 +2,6 @@ package com.moviespace.service;
 
 import com.moviespace.entity.Category;
 import com.moviespace.repository.CategoryRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
