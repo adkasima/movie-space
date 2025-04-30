@@ -21,7 +21,7 @@ public class CategoryController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+    public ResponseEntity<List<CategoryResponse>> getAll() {
         List<CategoryResponse> categories = categoryService.findAll()
                 .stream()
                 .map(CategoryMapper::toCategoryResponse)
@@ -31,16 +31,16 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryByID(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponse> getById(@PathVariable Long id) {
         return categoryService.getById(id)
                 .map(category -> ResponseEntity.ok(CategoryMapper.toCategoryResponse(category)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryResponse> save(@RequestBody CategoryRequest request) {
         Category newCategory = CategoryMapper.toCategory(request);
-        Category savedCategory = categoryService.createCategory(newCategory);
+        Category savedCategory = categoryService.save(newCategory);
         return ResponseEntity.status(HttpStatus.CREATED).body(CategoryMapper.toCategoryResponse(savedCategory));
     }
 

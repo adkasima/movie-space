@@ -3,7 +3,9 @@ package com.moviespace.mapper;
 import com.moviespace.controller.request.CategoryRequest;
 import com.moviespace.controller.response.CategoryResponse;
 import com.moviespace.entity.Category;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class CategoryMapper {
 
     public static Category toCategory(CategoryRequest categoryRequest) {
