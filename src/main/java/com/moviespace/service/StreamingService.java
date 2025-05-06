@@ -24,7 +24,7 @@ public class StreamingService {
     }
 
     public Optional<Streaming> getById(Long id) {
-        return Optional.ofNullable(streamingRepository.findById(id).orElse(null));
+        return streamingRepository.findById(id);
     }
 
     public void deleteById(Long id) {

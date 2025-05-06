@@ -24,7 +24,7 @@ public class CategoryService {
     }
 
     public Optional<Category> getById(Long id) {
-        return Optional.ofNullable(categoryRepository.findById(id).orElse(null));
+        return categoryRepository.findById(id);
     }
 
     public void deleteById(Long id) {
