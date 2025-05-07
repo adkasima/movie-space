@@ -19,6 +19,21 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Optional<Category> update(Long id, Category updateCategory) {
+        Optional<Category> optCategory = categoryRepository.findById(id);
+
+        if (optCategory.isPresent()) {
+
+            Category category = optCategory.get();
+
+            category.setName(updateCategory.getName());
+            categoryRepository.save(category);
+            return Optional.of(category);
+        }
+
+        return Optional.empty();
+    }
+
     public Category save(Category category) {
         return categoryRepository.save(category);
     }
