@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/moviespace/streaming")
@@ -43,9 +44,21 @@ public class StreamingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(StreamingMapper.toStreamingResponse(savedStreaming));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<StreamingResponse> update(@PathVariable Long id, @RequestBody StreamingRequest request) {
+        return streamingService.update(id, StreamingMapper.toStreaming(request)).map(streaming -> ResponseEntity.ok(StreamingMapper.toStreamingResponse(streaming)))
+        .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        streamingService.deleteById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Optional<Streaming> optStreaming = streamingService.getById(id);
+
+        if (optStreaming.isPresent()) {
+            streamingService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.notFound().build();
+
     }
 }
