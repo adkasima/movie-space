@@ -24,3 +24,7 @@ Este sistema foi desenvolvido para gerenciar filmes, suas respectivas categorias
 * Maven: Para build e gerenciamento de dependências do projeto.
 * SQL: Manipulação do banco de dados
 
+## Front-end
+
+Integração com Angular em breve...
+
