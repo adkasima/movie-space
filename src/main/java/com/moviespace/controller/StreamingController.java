@@ -5,6 +5,7 @@ import com.moviespace.controller.response.StreamingResponse;
 import com.moviespace.entity.Streaming;
 import com.moviespace.mapper.StreamingMapper;
 import com.moviespace.service.StreamingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +39,14 @@ public class StreamingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<StreamingResponse> save(@RequestBody StreamingRequest request) {
+    public ResponseEntity<StreamingResponse> save(@Valid @RequestBody StreamingRequest request) {
         Streaming newStreaming = StreamingMapper.toStreaming(request);
         Streaming savedStreaming = streamingService.save(newStreaming);
         return ResponseEntity.status(HttpStatus.CREATED).body(StreamingMapper.toStreamingResponse(savedStreaming));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<StreamingResponse> update(@PathVariable Long id, @RequestBody StreamingRequest request) {
+    public ResponseEntity<StreamingResponse> update(@Valid @PathVariable Long id, @RequestBody StreamingRequest request) {
         return streamingService.update(id, StreamingMapper.toStreaming(request)).map(streaming -> ResponseEntity.ok(StreamingMapper.toStreamingResponse(streaming)))
         .orElse(ResponseEntity.notFound().build());
     }
