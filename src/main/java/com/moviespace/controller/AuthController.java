@@ -9,6 +9,12 @@ import com.moviespace.entity.User;
 import com.moviespace.exceptions.UsernameOrPasswordInvalidException;
 import com.moviespace.mapper.UserMapper;
 import com.moviespace.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +30,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/moviespace/auth")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "Rota resposável pelo gerenciamento de usuários")
 public class AuthController {
 
     private final UserService userService;
     public final AuthenticationManager authenticationManager;
     public final TokenService tokenService;
 
+    @Operation(summary = "Registrar usuário", description = "Método responsável por registrar um novo usuário",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso",
+            content = @Content(schema = @Schema(implementation = UserResponse.class)))
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
         User savedUser = userService.save(UserMapper.toUser(request));
@@ -38,6 +49,10 @@ public class AuthController {
 
     }
 
+    @Operation(summary = "Logar usuário", description = "Método responsável por efetuar o login de um usuário",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponse(responseCode = "201", description = "Usuário logado com sucesso",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
@@ -50,7 +65,7 @@ public class AuthController {
 
             return ResponseEntity.ok(new LoginResponse(token));
 
-        }catch (BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new UsernameOrPasswordInvalidException("Usuário ou senha inválidos!");
         }
 
